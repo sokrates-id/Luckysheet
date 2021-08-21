@@ -76,17 +76,22 @@ const paths = {
     staticDemoData: ['src/demoData/*.js'],
     staticCssImages: ['src/css/**','!src/css/*.css'],
 
+    staticSokrates: ['src/sokrates/**/*.js'],
+
     // static resources dest
     destStaticHtml: ['dist'],
     destStaticFonts: ['dist/fonts'],
     destStaticAssets: ['dist/assets'],
     destStaticImages: ['dist/plugins/images'],
     destStaticExpendPlugins: ['dist/expendPlugins'],
-    destStaticDemoData: ['dist/demoData'],
     destStaticCssImages: ['dist/css'],
 
+    destStaticSokrates: ['dist/sokrates'],
+
     //core es module
-    core: ['src/**/*.js','!src/demoData/*.js','src/expendPlugins/**/plugin.js','!src/plugins/js/*.js'],
+    core: ['src/**/*.js','src/expendPlugins/**/plugin.js','!src/plugins/js/*.js',
+        '!src/sokrates/**/*.js'
+    ],
 
      //plugins src
     pluginsCss: ['src/plugins/css/*.css'],
@@ -113,6 +118,7 @@ const paths = {
     concatPlugins: 'plugins.css',
     concatCss: 'luckysheet.css',
     concatPluginsJs: 'plugin.js',
+    concatSokratesJs: 'sokrates.js',
 
     //plugins dest
     destPluginsCss: ['dist/plugins/css'],
@@ -163,8 +169,9 @@ function watcher(done) {
     watch(paths.staticAssets,{ delay: 500 }, series(copyStaticAssets, reloadBrowser));
     watch(paths.staticImages,{ delay: 500 }, series(copyStaticImages, reloadBrowser));
     watch(paths.staticExpendPlugins,{ delay: 500 }, series(copyStaticExpendPlugins, reloadBrowser));
-    watch(paths.staticDemoData,{ delay: 500 }, series(copyStaticDemoData, reloadBrowser));
     watch(paths.staticCssImages,{ delay: 500 }, series(copyStaticCssImages, reloadBrowser));
+
+    watch(paths.staticSokrates,{ delay: 500 }, series(copyStaticSokrates, reloadBrowser));
 
     done();
 }
@@ -282,21 +289,19 @@ function copyStaticExpendPlugins(){
     return src(paths.staticExpendPlugins)
         .pipe(dest(paths.destStaticExpendPlugins));
 }
-function copyStaticDemoData(){
-    return src(paths.staticDemoData)
-        .pipe(dest(paths.destStaticDemoData));
-        // .pipe(gulpBabel({
-        //     presets: ['@babel/env']
-        // }))
-        // .pipe(gulp.dest('dist'));
-}
 function copyStaticCssImages(){
     return src(paths.staticCssImages)
         .pipe(dest(paths.destStaticCssImages));
 }
+function copyStaticSokrates(){
+    return src(paths.staticSokrates)
+      .pipe(concat(paths.concatSokratesJs))
+      .pipe(gulpif(production, uglify(uglifyOptions)))
+      .pipe(dest(paths.destStaticSokrates));
+}
 
-const dev = series(clean, parallel(pluginsCss, plugins, css, pluginsJs, copyStaticHtml, copyStaticFonts, copyStaticAssets, copyStaticImages, copyStaticExpendPlugins, copyStaticDemoData, copyStaticCssImages, core), watcher, serve);
-const build = series(clean, parallel(pluginsCss, plugins, css, pluginsJs, copyStaticHtml, copyStaticFonts, copyStaticAssets, copyStaticImages, copyStaticExpendPlugins, copyStaticDemoData, copyStaticCssImages, core));
+const dev = series(clean, parallel(pluginsCss, plugins, css, pluginsJs, copyStaticHtml, copyStaticFonts, copyStaticAssets, copyStaticImages, copyStaticExpendPlugins, copyStaticCssImages, core, copyStaticSokrates), watcher, serve);
+const build = series(clean, parallel(pluginsCss, plugins, css, pluginsJs, copyStaticHtml, copyStaticFonts, copyStaticAssets, copyStaticImages, copyStaticExpendPlugins, copyStaticCssImages, core, copyStaticSokrates));
 
 exports.dev = dev;
 exports.build = build;
