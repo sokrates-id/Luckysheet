@@ -3,6 +3,8 @@ import sokratesSheetStudent from './sheets/sheetStudent';
 import sokratesSheetParent from './sheets/sheetParent';
 import serviceGeneral from "./services/serviceGeneral";
 import serviceMain from "./services/serviceMain";
+import getStudentColumns from "./models/modelStudent";
+// import {numdate} from "../global/format";
 
 $(async function () {
   const config = await serviceMain.getConfig();
@@ -203,5 +205,38 @@ $(async function () {
   luckysheet.create({
     ...options,
     ...sokratesOptions
+  });
+
+  $('#excel-save').click(() => {
+    const data = luckysheet.getSheetData(0).slice(1);
+
+    const studentColumns = getStudentColumns(master);
+    const students = [];
+    const totalData = data.length;
+    for (let i = 0; i < totalData; i++) {
+      let student = {};
+
+      // kalo student_name (1) & nis (2)
+      // kosong, gaperlu di save
+      if (!data[i][1].v || !data[i][2].v) {
+        continue;
+      }
+
+      for (let j = 0; j < studentColumns.length; j++) {
+        if (data[i] && data[i][j] && data[i][j].v) {
+
+          if (studentColumns[j].t === 'date') {
+            // convert date format
+            // student[studentColumns[j].c] = numdate(data[i][j].v).toISOString().slice(0, 10);
+          } else {
+            student[studentColumns[j].c] = data[i][j].v;
+          }
+        }
+      }
+
+      students.push(student);
+    }
+
+    console.log(students);
   });
 })

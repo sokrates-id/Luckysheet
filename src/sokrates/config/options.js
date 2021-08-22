@@ -15,7 +15,7 @@ const sokratesOptions = {
     strikethrough: false, //'Strikethrough (Alt+Shift+5)'
     underline: false, // 'Underline (Alt+Shift+6)'
     textColor: false, //'Text color'
-    fillColor: false, //'Cell color'
+    fillColor: true, //'Cell color'
     border: false, //'border'
     mergeCell: false, //'Merge cells'
     horizontalAlignMode: false, //'Horizontal alignment'

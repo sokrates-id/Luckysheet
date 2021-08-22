@@ -1661,7 +1661,7 @@ export function datenum_local(v, date1904) {
     return (epoch - dnthresh_utc) / (24 * 60 * 60 * 1000);
 }
 
-function numdate(v) {
+export function numdate(v) {
     var out = new Date();
     out.setTime(v * 24 * 60 * 60 * 1000 + dnthresh);
     return out;
