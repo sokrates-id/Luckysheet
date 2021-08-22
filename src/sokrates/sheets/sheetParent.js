@@ -182,7 +182,7 @@ const parentHeaders = parentColumns.map((i, idx) => {
   }
 );
 
-window.sokratesSheetParent = {
+const sokratesSheetParent = {
   "name": "Parent",
   "index": "Sheet_pdolzzie5xwi_1600927444447",
   celldata: [...parentHeaders],
@@ -247,4 +247,4 @@ window.sokratesSheetParent = {
   }
 }
 
-// export default sokratesSheetStudent;
+export default sokratesSheetParent;

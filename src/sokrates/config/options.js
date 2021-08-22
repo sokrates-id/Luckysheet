@@ -1,4 +1,4 @@
-window.sokratesOptions = {
+const sokratesOptions = {
   showtoolbar: true,
   showtoolbarConfig: {
     undoRedo: true, //Undo redo
@@ -108,3 +108,6 @@ window.sokratesOptions = {
   sheetFormulaBar: false,
 
 };
+
+
+export default sokratesOptions;
