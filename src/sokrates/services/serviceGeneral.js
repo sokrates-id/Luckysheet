@@ -1,49 +1,142 @@
-const getSchools = async () => {
-  return new Promise((resolve) => {
+const getSchools = async (config) => {
+  return new Promise(async (resolve, reject) => {
     $('#loading-text').text('memulai proses pengambilan data sekolah');
 
-    setTimeout(() => {
+    const res = await $.ajax({
+      url: config.url.get_schools,
+      type: 'GET',
+      dataType: 'json',
+      headers: {"Authorization": `Bearer ${config.auth.token}`}
+    });
+
+    if (res.status) {
       $('#loading-text').text('proses data sekolah selesai');
-      resolve(['TK Kebon Dalem', 'SD Kebon Dalem', 'SMP Kebon Dalem', 'SMA Kebon Dalem']);
-    }, 1000);
+      resolve(res.data.map(i => i.school_level_name));
+    } else {
+      reject([]);
+    }
   });
 }
 
-const getSchoolLevels = async () => {
-  return new Promise((resolve) => {
+const getSchoolLevels = async (config) => {
+  return new Promise(async (resolve, reject) => {
     $('#loading-text').text('memulai proses pengambilan data jenjang sekolah');
 
-    setTimeout(() => {
+    const res = await $.ajax({
+      url: config.url.get_school_levels,
+      type: 'GET',
+      dataType: 'json',
+      headers: {"Authorization": `Bearer ${config.auth.token}`}
+    });
 
+    if (res.status) {
       $('#loading-text').text('proses data jenjang sekolah selesai');
-      resolve(['TK', 'SD', 'SMP', 'SMA']);
-    }, 1000);
+      resolve(res.data.map(i => i.school_level_name));
+    } else {
+      reject([]);
+    }
   });
 }
 
-const getYearLevels = async () => {
-  return new Promise((resolve) => {
+const getYearLevels = async (config) => {
+  return new Promise(async (resolve, reject) => {
     $('#loading-text').text('memulai proses pengambilan data tingkat sekolah');
 
-    setTimeout(() => {
+    const res = await $.ajax({
+      url: config.url.get_year_levels,
+      type: 'GET',
+      dataType: 'json',
+      headers: {"Authorization": `Bearer ${config.auth.token}`}
+    });
 
+    if (res.status) {
       $('#loading-text').text('proses data tingkat sekolah selesai');
-      resolve(['KB', 'TK A', 'TK B', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']);
-    }, 1000);
+      resolve(res.data.map(i => i.year_level_name));
+    } else {
+      reject([]);
+    }
   });
 }
 
-const getReligions = async () => {
-  return new Promise((resolve) => {
+const getReligions = async (config) => {
+  return new Promise(async (resolve, reject) => {
     $('#loading-text').text('memulai proses pengambilan data agama');
 
-    setTimeout(() => {
+    const res = await $.ajax({
+      url: config.url.get_religions,
+      type: 'GET',
+      dataType: 'json',
+      headers: {"Authorization": `Bearer ${config.auth.token}`}
+    });
 
+    if (res.status) {
       $('#loading-text').text('proses data agama selesai');
-      resolve(['ISLAM', 'HINDUISM', 'BUDDHISM', 'CHRISTIANITY', 'KONGHUCU', 'CATHOLICISM']);
-    }, 1000);
+      resolve(res.data.map(i => i.religion_name));
+    } else {
+      reject([]);
+    }
   });
+}
 
+const getNationalities = async (config) => {
+  return new Promise(async (resolve, reject) => {
+    $('#loading-text').text('memulai proses pengambilan data kewarganegaraan');
+
+    const res = await $.ajax({
+      url: config.url.get_nationalities,
+      type: 'GET',
+      dataType: 'json',
+      headers: {"Authorization": `Bearer ${config.auth.token}`}
+    });
+
+    if (res.status) {
+      $('#loading-text').text('proses data kewarganegaraan selesai');
+      resolve(res.data.map(i => i.nationality_name));
+    } else {
+      reject([]);
+    }
+  });
+}
+
+const getCountries = async (config) => {
+  return new Promise(async (resolve, reject) => {
+    $('#loading-text').text('memulai proses pengambilan data negara');
+
+    const res = await $.ajax({
+      url: config.url.get_countries,
+      type: 'GET',
+      dataType: 'json',
+      headers: {"Authorization": `Bearer ${config.auth.token}`}
+    });
+
+    if (res.status) {
+      $('#loading-text').text('proses data negara selesai');
+      resolve(res.data.map(i => i.country_name));
+    } else {
+      reject([]);
+    }
+  });
+}
+
+
+const getProvinces = async (config) => {
+  return new Promise(async (resolve, reject) => {
+    $('#loading-text').text('memulai proses pengambilan data provinsi');
+
+    const res = await $.ajax({
+      url: config.url.get_provinces,
+      type: 'GET',
+      dataType: 'json',
+      headers: {"Authorization": `Bearer ${config.auth.token}`}
+    });
+
+    if (res.status) {
+      $('#loading-text').text('proses data provinsi selesai');
+      resolve(res.data.map(i => i.province_name));
+    } else {
+      reject([]);
+    }
+  });
 }
 
 export default {
@@ -51,5 +144,8 @@ export default {
   getSchoolLevels: getSchoolLevels,
   getYearLevels: getYearLevels,
   getReligions: getReligions,
+  getNationalities: getNationalities,
+  getCountries: getCountries,
+  getProvinces: getProvinces,
 };
 

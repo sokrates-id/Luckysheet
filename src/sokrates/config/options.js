@@ -31,7 +31,7 @@ const sokratesOptions = {
     frozenMode: false, //'freeze mode'
     sortAndFilter: false, //'Sort and filter'
     conditionalFormat: false, //'Conditional Format'
-    dataVerification: true, // 'Data Verification'
+    dataVerification: false, // 'Data Verification'
     splitColumn: false, //'Split column'
     screenshot: false, //'screenshot'
     findAndReplace: true, //'Find and Replace'
@@ -71,7 +71,7 @@ const sokratesOptions = {
   ],
 
   //
-  myFolderUrl: 'https://sokrates.co.id',
+  myFolderUrl: '/',
   functionButton: `
 <button id="excel-save" class="btn btn-primary btn-sucess" style=" padding:3px 6px; font-size: 12px; margin-right: 10px;">SAVE</button>`,
   cellRightClickConfig: {

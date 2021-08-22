@@ -1,13 +1,32 @@
 import serviceStudent from '../services/serviceStudent';
-import serviceGeneral from '../services/serviceGeneral';
 
-const sokratesSheetStudent = async () => {
+const sokratesSheetStudent = async (config, master) => {
 
-  const schools = await serviceGeneral.getSchools();
-  const schoolLevels = await serviceGeneral.getSchoolLevels();
-  const yearLevels = await serviceGeneral.getYearLevels();
-  const religions = await serviceGeneral.getReligions();
-  const students = await serviceStudent.getStudents();
+  const students = await serviceStudent.getStudents(config);
+
+  const transportData = [
+    'On Foot',
+    'Motocycle',
+    'Private Car',
+    'Bicycle',
+    'Public Transportation (Angkot, Bus)',
+    'Train',
+    'Ojek',
+    'Other'
+  ];
+  const childStatusData = [
+    'Biological Child',
+    'Foster Child',
+    'Step Child'
+  ];
+  const livingWithData = [
+    'Father',
+    'Mother',
+    'Both Parents',
+    'Guardian',
+    'Dormitory',
+    'Boarding House'
+  ];
 
   /**
    * t: tipe data, default string
@@ -77,7 +96,7 @@ const sokratesSheetStudent = async () => {
       },
     },
     {
-      c: '_',
+      c: 'enrollment_status',
       n: 'Status Pendaftaran',
       w: 120,
       r: true,
@@ -101,7 +120,7 @@ const sokratesSheetStudent = async () => {
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": schools.join(','),
+        "value1": master.schools.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
@@ -118,7 +137,7 @@ const sokratesSheetStudent = async () => {
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": schoolLevels.join(','),
+        "value1": master.schoolLevels.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
@@ -135,7 +154,7 @@ const sokratesSheetStudent = async () => {
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": yearLevels.join(','),
+        "value1": master.yearLevels.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
@@ -146,13 +165,13 @@ const sokratesSheetStudent = async () => {
     },
     {
       t: 'date',
-      c: '_',
+      c: 'join_date_school',
       n: 'Tanggal Masuk',
       w: 100,
       r: true,
     },
     {
-      c: '_',
+      c: 'gender',
       n: 'Jenis Kelamin',
       w: 100,
       r: true,
@@ -169,7 +188,7 @@ const sokratesSheetStudent = async () => {
       }
     },
     {
-      c: '_',
+      c: 'place_of_birth',
       n: 'Tempat Lahir',
       w: 150,
       r: true,
@@ -187,13 +206,13 @@ const sokratesSheetStudent = async () => {
     },
     {
       t: 'date',
-      c: '_',
+      c: 'date_of_birth',
       n: 'Tanggal Lahir',
       w: 150,
       r: true,
     },
     {
-      c: '_',
+      c: 'email',
       n: 'Email',
       w: 150,
       r: true,
@@ -210,7 +229,7 @@ const sokratesSheetStudent = async () => {
       },
     },
     {
-      c: '_',
+      c: 'address_line1',
       n: 'Alamat Lengkap',
       w: 200,
       r: true,
@@ -227,13 +246,117 @@ const sokratesSheetStudent = async () => {
       },
     },
     {
-      c: '_',
+      c: 'religion_id',
       n: 'Agama',
       w: 100,
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": religions.join(','),
+        "value1": master.religions.join(','),
+        "value2": "",
+        "checked": false,
+        "remote": false,
+        "prohibitInput": false,
+        "hintShow": false,
+        "hintText": ""
+      }
+    },
+    {
+      c: 'nisn',
+      n: 'NISN',
+      w: 100,
+    },
+    {
+      c: 'admission_form_id',
+      n: 'Nomor Formulir Pendaftaran',
+      w: 100,
+    },
+    {
+      c: '_',
+      n: 'Kewarganegaraan',
+      w: 100,
+      v: {
+        "type": "dropdown",
+        "type2": null,
+        "value1": master.nationalities.join(','),
+        "value2": "",
+        "checked": false,
+        "remote": false,
+        "prohibitInput": false,
+        "hintShow": false,
+        "hintText": ""
+      }
+    },
+    {
+      c: 'identification_number',
+      n: 'Nomor KTP',
+      w: 100,
+    },
+    {
+      c: 'passport_no',
+      n: 'Nomor Paspor',
+      w: 100,
+    },
+    {
+      t: 'date',
+      c: 'passport_expired_date',
+      n: 'Tanggal Berakhir Paspor',
+      w: 100,
+    },
+    {
+      c: 'kitas_no',
+      n: 'Nomor KITAS',
+      w: 100,
+    },
+    {
+      t: 'date',
+      c: 'kitas_expired_date',
+      n: 'Tanggal Berakhir KITAS',
+      w: 100,
+    },
+    {
+      c: 'most_used_lang',
+      n: 'Bahasa',
+      w: 100,
+    },
+    {
+      c: 'phone_number',
+      n: 'Nomor Handphone',
+      w: 100,
+    },
+    {
+      c: 'cellular_number',
+      n: 'Nomor Telepon',
+      w: 100,
+    },
+    {
+      c: 'postal_code',
+      n: 'Kode Pos',
+      w: 100,
+    },
+    {
+      c: 'sub_district',
+      n: 'Kelurahan',
+      w: 100,
+    },
+    {
+      c: 'districts',
+      n: 'Kecamatan',
+      w: 100,
+    },
+    {
+      c: 'city',
+      n: 'Kota',
+      w: 100,
+    },
+    {
+      c: '_',
+      n: 'Provinsi',
+      w: 100,
+      v: {
+        "type": "dropdown",
+        "type2": null,
+        "value1": master.provinces.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
@@ -244,114 +367,76 @@ const sokratesSheetStudent = async () => {
     },
     {
       c: '_',
-      n: 'NISN',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor Formulir Pendaftaran',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kewarganegaraan',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor KTP',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor Paspor',
-      w: 100,
-    },
-    {
-      t: 'date',
-      c: '_',
-      n: 'Tanggal Berakhir Paspor',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor KITAS',
-      w: 100,
-    },
-    {
-      t: 'date',
-      c: '_',
-      n: 'Tanggal Berakhir KITAS',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Bahasa',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor Handphone',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor Telepon',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kode Pos',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kelurahan',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kecamatan',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kota',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Provinsi',
-      w: 100,
-    },
-    {
-      c: '_',
       n: 'Negara',
       w: 100,
+      v: {
+        "type": "dropdown",
+        "type2": null,
+        "value1": master.countries.join(','),
+        "value2": "",
+        "checked": false,
+        "remote": false,
+        "prohibitInput": false,
+        "hintShow": false,
+        "hintText": ""
+      }
     },
     {
-      c: '_',
+      c: 'living_with',
       n: 'Tinggal Bersama',
       w: 100,
+      v: {
+        "type": "dropdown",
+        "type2": null,
+        "value1": livingWithData.join(','),
+        "value2": "",
+        "checked": false,
+        "remote": false,
+        "prohibitInput": false,
+        "hintShow": false,
+        "hintText": ""
+      }
     },
     {
-      c: '_',
+      c: 'distance_to_school',
       n: 'Jarak Ke Sekolah',
       w: 100,
     },
     {
-      c: '_',
+      c: 'transport_to_school',
       n: 'Transportasi Ke Sekolah',
       w: 100,
+      v: {
+        "type": "dropdown",
+        "type2": null,
+        "value1": transportData.join(','),
+        "value2": "",
+        "checked": false,
+        "remote": false,
+        "prohibitInput": false,
+        "hintShow": false,
+        "hintText": ""
+      }
     },
     {
-      c: '_',
+      c: 'child_status',
       n: 'Status Anak',
       w: 100,
+      v: {
+        "type": "dropdown",
+        "type2": null,
+        "value1": childStatusData.join(','),
+        "value2": "",
+        "checked": false,
+        "remote": false,
+        "prohibitInput": false,
+        "hintShow": false,
+        "hintText": ""
+      }
     },
   ];
 
-  const totalRows = 1000;
+  const totalRows = students.length + 1000;
   const totalColumns = studentColumns.length;
 
   const studentValidations = {};
@@ -368,22 +453,12 @@ const sokratesSheetStudent = async () => {
   let studentCells = [];
 
   const studentHeaders = studentColumns.map((i, idx) => {
-      // let ct = {
-      //   "fa": "General", "t": "g",
-      // };
-      //
-      // if (i.t === 'date') {
-      //   ct = {
-      //     "fa": "yyyy-MM-dd", "t": "d"
-      //   };
-      // }
-
       return {
         r: 0,
         c: idx,
         v: {
           ct: {
-            "fa": "General", "t": "g",
+            "fa": "@", "t": "s",
           },
           "v": i.n,
           "m": i.n,
@@ -398,13 +473,13 @@ const sokratesSheetStudent = async () => {
   studentCells = [...studentHeaders];
 
   // preallocation array size
-  let arrOldLength = studentCells.length - 1;
+  // let arrOldLength = studentCells.length - 1;
   let arrStudentsLength = students.length;
-  studentCells.length = arrOldLength + ((totalRows - 1) * (totalColumns - 1));
+  // studentCells.length = arrOldLength + ((totalRows - 1) * (totalColumns - 1));
 
-  for (let i = 1; i < totalColumns; i++) {
+  for (let i = 0; i < totalColumns; i++) {
     let ct = {
-      "fa": "General", "t": "g",
+      "fa": "@", "t": "s",
     };
 
     if (studentColumns[i].t === 'date') {
@@ -419,7 +494,17 @@ const sokratesSheetStudent = async () => {
 
       // preallocation array size
       const value = j < arrStudentsLength ? students[j][columnName] : '';
-      studentCells[arrOldLength++] = {
+      // studentCells[arrOldLength++] = {
+      //   r: j,
+      //   c: i,
+      //   v: {
+      //     ct,
+      //     v: value,
+      //     m: value,
+      //   },
+      // };
+
+      studentCells.push({
         r: j,
         c: i,
         v: {
@@ -427,7 +512,7 @@ const sokratesSheetStudent = async () => {
           v: value,
           m: value,
         },
-      };
+      });
     }
   }
 
@@ -470,29 +555,23 @@ const sokratesSheetStudent = async () => {
       type: 'rangeBoth',
       range: {row_focus: 0, column_focus: 0},
     },
-    "luckysheet_select_save": [
-      {
-        "left": 963,
-        "width": 125,
-        "top": 240,
-        "height": 19,
-        "left_move": 963,
-        "width_move": 125,
-        "top_move": 240,
-        "height_move": 19,
-        "row": [
-          12,
-          12
-        ],
-        "column": [
-          7,
-          7
-        ],
-        "row_focus": 12,
-        "column_focus": 7
-      }
-    ],
-    "dataVerification": studentValidations,
+    luckysheet_alternateformat_save: [],
+    "filter_select": {
+      // "left": 74,
+      // "width": 73,
+      // "top": 20,
+      // "height": 19,
+      // "left_move": 74,
+      // "width_move": 369,
+      // "top_move": 20,
+      // "height_move": 119,
+      "row": [0, totalRows],
+      "column": [1, totalColumns - 1],
+      // "row_focus": 1,
+      // "column_focus": 1
+    },
+    luckysheet_select_save: [],
+    dataVerification: studentValidations,
   }
 }
 

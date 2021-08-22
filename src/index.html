@@ -20,198 +20,26 @@
     <meta name="msapplication-TileColor" content="#00aba9">
     <meta name="theme-color" content="#ffffff">
 
-    <link rel='stylesheet' href='./plugins/css/pluginsCss.css'/>
-    <link rel='stylesheet' href='./plugins/plugins.css'/>
-    <link rel='stylesheet' href='./css/luckysheet.css'/>
+<!--    <link rel='stylesheet' href='./plugins/css/pluginsCss.css'/>-->
+<!--    <link rel='stylesheet' href='./plugins/plugins.css'/>-->
+<!--    <link rel='stylesheet' href='./css/luckysheet.css'/>-->
     <link rel='stylesheet' href='./assets/iconfont/iconfont.css'/>
-    <script src="./plugins/js/plugin.js"></script>
+<!--    <script src="./plugins/js/plugin.js"></script>-->
 
-    <!-- rollup luckysheet.js -->
-    <script src="./luckysheet.umd.js"></script>
-    <style>
-        /* 自定义loading演示样式 */
-        @keyframes loading-rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes loading-dash {
-            0% {
-                stroke-dasharray: 1, 200;
-                stroke-dashoffset: 0;
-            }
-
-            50% {
-                stroke-dasharray: 90, 150;
-                stroke-dashoffset: -40px;
-            }
-
-            100% {
-                stroke-dasharray: 90, 150;
-                stroke-dashoffset: -120px;
-            }
-        }
-
-        .loadingAnimation {
-            width: 3em;
-            height: 3em;
-            animation: loading-rotate 2s linear infinite;
-        }
-
-        .loadingAnimation circle {
-            animation: loading-dash 1.5s ease-in-out infinite;
-            stroke-dasharray: 90, 150;
-            stroke-dashoffset: 0;
-            stroke-width: 2;
-            stroke: currentColor;
-            stroke-linecap: round;
-        }
-
-        #loading {
-            font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-            color: #2db4f9;
-            display: flex;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100vw;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        @keyframes loading-blink {
-            0% {
-                opacity: .2;
-            }
-            20% {
-                opacity: 1;
-            }
-            100% {
-                opacity: .2;
-            }
-        }
-
-        .status-loading {
-            font-weight: bold;
-            font-style: italic;
-            font-stretch: normal;
-        }
-
-        .status-loading span {
-            font-size: 2em;
-            line-height: 0;
-            animation-name: loading-blink;
-            animation-duration: 1.4s;
-            animation-iteration-count: infinite;
-            animation-fill-mode: both;
-        }
-
-        .status-loading span:nth-child(2) {
-            animation-delay: .2s;
-        }
-
-        .status-loading span:nth-child(3) {
-            animation-delay: .4s;
-        }
-
-
-        .loader {
-            color: #2db4f9;
-            font-size: 20px;
-            margin: 100px auto;
-            width: 1em;
-            height: 1em;
-            border-radius: 50%;
-            position: relative;
-            text-indent: -9999em;
-            -webkit-animation: load4 1.3s infinite linear;
-            animation: load4 1.3s infinite linear;
-            -webkit-transform: translateZ(0);
-            -ms-transform: translateZ(0);
-            transform: translateZ(0);
-        }
-
-        @-webkit-keyframes load4 {
-            0%,
-            100% {
-                box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
-            }
-            12.5% {
-                box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-            }
-            25% {
-                box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-            }
-            37.5% {
-                box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
-            }
-            50% {
-                box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
-            }
-            62.5% {
-                box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
-            }
-            75% {
-                box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
-            }
-            87.5% {
-                box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
-            }
-        }
-
-        @keyframes load4 {
-            0%,
-            100% {
-                box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
-            }
-            12.5% {
-                box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-            }
-            25% {
-                box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-            }
-            37.5% {
-                box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
-            }
-            50% {
-                box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
-            }
-            62.5% {
-                box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
-            }
-            75% {
-                box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
-            }
-            87.5% {
-                box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
-            }
-        }
-
-
-    </style>
+<!--    &lt;!&ndash; rollup luckysheet.js &ndash;&gt;-->
+<!--    <script src="./luckysheet.umd.js"></script>-->
 </head>
 
 <body>
 
-<div id="loading">
-    <div class="loader">Loading...</div>
-    <div>
-        <span class="status-loading"><i id="loading-text">mohon bersabar, sedang memulai</i>
-            <span>.</span><span>.</span><span>.</span></span>
-    </div>
-</div>
-
-<div id="luckysheet" style="margin:0px;padding:0px;position:absolute;width:100%;height:100%;left: 0px;top: 0px;"></div>
-
-<!-- SOKRATES-->
-<script src="./sokrates/student.js"></script>
+<ul>
+    <li>
+        <a href="/student.html">student</a>
+    </li>
+    <li>
+        <a href="/student.html">staff</a>
+    </li>
+</ul>
 
 </body>
 

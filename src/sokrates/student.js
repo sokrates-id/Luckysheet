@@ -1,9 +1,32 @@
 import sokratesOptions from './config/options';
 import sokratesSheetStudent from './sheets/sheetStudent';
 import sokratesSheetParent from './sheets/sheetParent';
+import serviceGeneral from "./services/serviceGeneral";
+import serviceMain from "./services/serviceMain";
 
 $(async function () {
-  const test1 = await sokratesSheetStudent();
+  const config = await serviceMain.getConfig();
+
+  const schools = await serviceGeneral.getSchools(config);
+  const schoolLevels = await serviceGeneral.getSchoolLevels(config);
+  const yearLevels = await serviceGeneral.getYearLevels(config);
+  const religions = await serviceGeneral.getReligions(config);
+  const nationalities = await serviceGeneral.getNationalities(config);
+  const countries = await serviceGeneral.getCountries(config);
+  const provinces = await serviceGeneral.getProvinces(config);
+
+  const master = {
+    schools,
+    schoolLevels,
+    yearLevels,
+    religions,
+    nationalities,
+    countries,
+    provinces,
+  }
+
+  const sheetStudent = await sokratesSheetStudent(config, master);
+  const sheetParent = await sokratesSheetParent(master);
 
   /**
    * Get url parameters
@@ -153,8 +176,8 @@ $(async function () {
       },
       data:
         [
-          test1,
-          sokratesSheetParent,
+          sheetStudent,
+          sheetParent,
         ],
     }
   }
