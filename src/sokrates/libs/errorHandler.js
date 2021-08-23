@@ -1,6 +1,6 @@
 export function errorHandlerHttp(err) {
   console.log('err', err);
-  $('#loading').remove();
+  $('.loading').remove();
   $('#luckysheet').remove();
   $('#error').css('display', 'flex');
 

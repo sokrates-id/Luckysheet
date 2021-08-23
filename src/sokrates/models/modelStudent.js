@@ -33,12 +33,12 @@ const livingWithData = [
 const getStudentColumns = (master) => {
 
   return [
-    {
-      c: 'student_id',
-      n: 'student_id',
-      w: 70,
-      r: true,
-    },
+    // {
+    //   c: 'student_id',
+    //   n: 'student_id',
+    //   w: 70,
+    //   r: true,
+    // },
     {
       c: 'student_name',
       n: 'Nama Lengkap Siswa',
@@ -51,7 +51,7 @@ const getStudentColumns = (master) => {
         "value2": "255",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       },
@@ -68,7 +68,7 @@ const getStudentColumns = (master) => {
         "value2": "50",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       },
@@ -85,7 +85,7 @@ const getStudentColumns = (master) => {
         "value2": "100",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       },
@@ -102,58 +102,58 @@ const getStudentColumns = (master) => {
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
     },
     {
-      c: '_',
+      c: 'enroll_school_location_id',
       n: 'Nama Sekolah',
       w: 150,
       r: true,
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": master.schools.join(','),
+        "value1": master.schools.names.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
     },
     {
-      c: '_',
+      c: 'enroll_school_level_id',
       n: 'Jenjang Pendidikan',
       w: 150,
       r: true,
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": master.schoolLevels.join(','),
+        "value1": master.schoolLevels.names.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
     },
     {
-      c: '_',
+      c: 'enroll_year_level_id',
       n: 'Tingkat Sekolah',
       w: 150,
       r: true,
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": master.yearLevels.join(','),
+        "value1": master.yearLevels.names.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
@@ -177,7 +177,7 @@ const getStudentColumns = (master) => {
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
@@ -194,7 +194,7 @@ const getStudentColumns = (master) => {
         "value2": "100",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       },
@@ -218,7 +218,7 @@ const getStudentColumns = (master) => {
         "value2": "100",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       },
@@ -235,7 +235,7 @@ const getStudentColumns = (master) => {
         "value2": "1000",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       },
@@ -247,11 +247,11 @@ const getStudentColumns = (master) => {
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": master.religions.join(','),
+        "value1": master.religions.names.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
@@ -273,11 +273,11 @@ const getStudentColumns = (master) => {
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": master.nationalities.join(','),
+        "value1": master.nationalities.names.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
@@ -351,11 +351,11 @@ const getStudentColumns = (master) => {
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": master.provinces.join(','),
+        "value1": master.provinces.names.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
@@ -367,11 +367,11 @@ const getStudentColumns = (master) => {
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": master.countries.join(','),
+        "value1": master.countries.names.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
@@ -387,7 +387,7 @@ const getStudentColumns = (master) => {
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
@@ -408,7 +408,7 @@ const getStudentColumns = (master) => {
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }
@@ -424,7 +424,7 @@ const getStudentColumns = (master) => {
         "value2": "",
         "checked": false,
         "remote": false,
-        "prohibitInput": false,
+        "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
       }

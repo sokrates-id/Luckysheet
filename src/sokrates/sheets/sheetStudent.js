@@ -1,5 +1,6 @@
 import serviceStudent from '../services/serviceStudent';
 import getStudentColumns from "../models/modelStudent";
+import {columnsWillLookupById} from "../models/modelGeneral";
 
 const sokratesSheetStudent = async (config, master) => {
 
@@ -7,7 +8,7 @@ const sokratesSheetStudent = async (config, master) => {
 
   const studentColumns = getStudentColumns(master);
 
-  const totalRows = students.length;
+  const totalRows = students.length + 100;
   const totalColumns = studentColumns.length;
 
   const studentValidations = {};
@@ -61,10 +62,19 @@ const sokratesSheetStudent = async (config, master) => {
 
     let columnName = studentColumns[i].c ? studentColumns[i].c : 0;
 
+    let willLookupValueById = columnsWillLookupById[columnName];
+
     for (let j = 1; j < totalRows; j++) {
 
+
+      let value = j < arrStudentsLength ? students[j][columnName] : null;
+
+      if (willLookupValueById) {
+        value = master[willLookupValueById].valuesById[+value];
+      }
+
+
       // preallocation array size
-      const value = j < arrStudentsLength ? students[j][columnName] : null;
       // studentCells[arrOldLength++] = {
       //   r: j,
       //   c: i,
@@ -99,7 +109,7 @@ const sokratesSheetStudent = async (config, master) => {
       "columnlen": $.extend({}, studentColumns.map(i => i.w ? i.w : 50)),
       "rowhidden": {}, //hidden rows
       "colhidden": {
-        0: 0, // hide column student_id
+        // 0: 0, // hide column student_id
       },
       "customWidth": {
         "2": 1,
@@ -132,32 +142,39 @@ const sokratesSheetStudent = async (config, master) => {
         "type": "default",
         "cellrange": [
           {
-            "column": [3, 3], // kasih warna merah kalo duplicate student nis
+            "column": [3, 3], // kasih warna merah kalo duplicate student nis(3)
             "row": [1, totalRows - 1],
           }
         ],
         "format": {
           "textColor": "#000000",
-          "cellColor": "#ff0000"
+          "cellColor": "#e35663"
         },
         "conditionName": "duplicateValue",
         "conditionRange": [],
         "conditionValue": ["0"]
+      },
+      {
+        "type": "default", //
+        "cellrange": [
+          {
+            "columnLookup": [0, 2], // student_name(0) & nis(2) kalo di isi, baru jalanin validasi ini
+            "column": [...studentColumns.keys()].filter(i => studentColumns[i].r === true), // index dari column student yang required
+            "row": [1, totalRows - 1],
+          }
+        ],
+        "format": {
+          "textColor": "#000000",
+          "cellColor": "#e35663"
+        },
+        "conditionName": "required", // ini custom logic nya ada di file conditionformat.js, terus cari: conditionName == "required"
+        "conditionRange": [],
+        "conditionValue": [],
       }
     ],
     "filter_select": {
-      // "left": 74,
-      // "width": 73,
-      // "top": 20,
-      // "height": 19,
-      // "left_move": 74,
-      // "width_move": 369,
-      // "top_move": 20,
-      // "height_move": 119,
       "row": [0, totalRows - 1],
       "column": [1, totalColumns - 1],
-      // "row_focus": 1,
-      // "column_focus": 1
     },
     luckysheet_select_save: [],
     dataVerification: studentValidations,

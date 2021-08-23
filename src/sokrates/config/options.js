@@ -15,7 +15,7 @@ const sokratesOptions = {
     strikethrough: false, //'Strikethrough (Alt+Shift+5)'
     underline: false, // 'Underline (Alt+Shift+6)'
     textColor: false, //'Text color'
-    fillColor: true, //'Cell color'
+    fillColor: false, //'Cell color'
     border: false, //'border'
     mergeCell: false, //'Merge cells'
     horizontalAlignMode: false, //'Horizontal alignment'
@@ -78,7 +78,7 @@ const sokratesOptions = {
     copy: true, // copy
     copyAs: false, // copy as
     paste: true, // paste
-    insertRow: true, // insert row
+    insertRow: false, // insert row
     insertColumn: false, // insert column
     deleteRow: false, // delete the selected row
     deleteColumn: false, // delete the selected column

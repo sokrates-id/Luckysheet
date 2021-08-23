@@ -72,7 +72,7 @@
             stroke-linecap: round;
         }
 
-        #loading, #error {
+        .loading, .loading-save, #error {
             font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
             color: #2db4f9;
             display: flex;
@@ -84,12 +84,29 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            z-index: 2000;
+            background-color: #000000b3;
+            overflow: hidden;
+        }
+
+        .loading-save {
+            display: none;
         }
 
         #error {
             display: none;
             color: #ff2525;
             font-size: 1.5rem;
+        }
+
+        #error-close {
+            cursor: pointer;
+            color: #d8d8ff;
+        }
+
+        #error-close:hover {
+            font-weight: bold;
+            color: #a4a4cb;
         }
 
         @keyframes loading-blink {
@@ -206,10 +223,18 @@
 
 <body>
 
-<div id="loading">
+<div class="loading">
     <div class="loader">Loading...</div>
     <div>
-        <span class="status-loading"><i id="loading-text">mohon bersabar, sedang memulai</i>
+        <span class="status-loading"><i class="loading-text">mohon bersabar, sedang memulai</i>
+            <span>.</span><span>.</span><span>.</span></span>
+    </div>
+</div>
+
+<div class="loading-save">
+    <div class="loader">Loading...</div>
+    <div>
+        <span class="status-loading"><i class="loading-save-text">mohon bersabar, sedang memulai menyimpan data</i>
             <span>.</span><span>.</span><span>.</span></span>
     </div>
 </div>
