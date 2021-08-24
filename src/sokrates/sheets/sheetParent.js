@@ -1,182 +1,38 @@
+import getParentColumns from "../models/modelParent";
+import serviceStudent from "../services/serviceStudent";
+import {columnsWillLookupById} from "../models/modelGeneral";
 
-const sokratesSheetParent = async (master) => {
+const sokratesSheetParent = async (config, master) => {
 
-  /**
-   * c: nama column dari database
-   * n: tampilan di user
-   * w: panjang column
-   * r: required apa engga
-   */
-  const parentColumns = [
-    {
-      c: 'student_id',
-      n: 'student_id',
-      w: 70,
-      r: true,
-    },
-    {
-      c: 'nis',
-      n: 'NIS',
-      w: 70,
-      r: true,
-    },
-    {
-      c: 'student_name',
-      n: 'Nama Lengkap Siswa',
-      w: 200,
-      r: true,
-    },
-    {
-      c: 'parent_type',
-      n: 'Orangtua',
-      w: 150,
-      r: true,
-    },
-    {
-      c: '_',
-      n: 'Nama Orangtua',
-      w: 200,
-      r: true,
-    },
-    {
-      c: '_',
-      n: 'Alamat Lengkap',
-      w: 150,
-      r: true,
-    },
-    {
-      c: '_',
-      n: 'Jenis Kelamin',
-      w: 100,
-      r: true,
-    },
-    {
-      c: '_',
-      n: 'Tempat Lahir',
-      w: 150,
-    },
-    {
-      c: '_',
-      n: 'Tanggal Lahir',
-      w: 150,
-    },
-    {
-      c: '_',
-      n: 'Agama',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kewarganegaraan',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor KTP',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor Paspor',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Tanggal Berakhir Paspor',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor KITAS',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Tanggal Berakhir KITAS',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor Handphone',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Nomor Telepon',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Email',
-      w: 150,
-    },
-    {
-      c: '_',
-      n: 'Kode Pos',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kelurahan',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kecamatan',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kota',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Provinsi',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Negara',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Perusahaan',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Jabatan',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Kisaran Gaji',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Hubungan dengan Anak',
-      w: 100,
-    },
-    {
-      c: '_',
-      n: 'Pendidikan Terakhir',
-      w: 150,
-    },
-  ];
+  const parents = await serviceStudent.getParents(config);
 
+  const parentColumns = getParentColumns(master);
+
+  const totalRows = parents.length + 100;
+  const totalColumns = parentColumns.length;
+
+  const parentValidations = {};
+  for (let i = 0; i < totalColumns; i++) {
+    if (parentColumns[i].v === undefined || parentColumns[i].v === null) {
+      continue;
+    }
+
+    for (let j = 1; j < totalRows; j++) {
+      parentValidations[`${j}_${i}`] = parentColumns[i].v;
+    }
+  }
+
+  let parentCells = [];
   const parentHeaders = parentColumns.map((i, idx) => {
       return {
         r: 0,
         c: idx,
         v: {
           ct: {
-            "fa": "General", "t": "g"
+            "fa": "@", "t": "s",
           },
-          v: i.n,
-          m: i.n,
+          "v": i.n,
+          "m": i.n,
           bg: i.r ? '#e35663' : 'white',
           fc: 'black',
           bl: 1,
@@ -185,19 +41,59 @@ const sokratesSheetParent = async (master) => {
     }
   );
 
+  parentCells = [...parentHeaders];
+  let arrParentsLength = parents.length;
+
+
+  for (let i = 0; i < totalColumns; i++) {
+    let ct = {
+      "fa": "@", "t": "s",
+    };
+
+    if (parentColumns[i].t === 'date') {
+      ct = {
+        "fa": "yyyy-MM-dd", "t": "d"
+      };
+    }
+
+    let columnName = parentColumns[i].c ? parentColumns[i].c : 0;
+
+    let willLookupValueById = columnsWillLookupById[columnName];
+
+    for (let j = 1; j < totalRows; j++) {
+
+
+      let value = j < arrParentsLength ? parents[j][columnName] : null;
+
+      if (willLookupValueById) {
+        value = master[willLookupValueById].valuesById[+value];
+      }
+
+      parentCells.push({
+        r: j,
+        c: i,
+        v: {
+          ct,
+          v: value,
+          m: value,
+        },
+      });
+    }
+  }
+
   return {
     "name": "Parent",
-    "index": "Sheet_pdolzzie5xwi_1600927444447",
-    celldata: [...parentHeaders],
-    "row": 100,
-    "column": parentColumns.length,
+    "index": 1,
+    celldata: parentCells,
+    "row": totalRows,
+    "column": totalColumns.length - 1,
     "config": {
       "merge": {},
       "rowlen": {},
       "columnlen": $.extend({}, parentColumns.map(i => i.w ? i.w : 50)),
       "rowhidden": {}, //hidden rows
       "colhidden": {
-        0: 0, // hide column student_id
+        // 0: 0, // hide column student_id
       },
       "customWidth": {
         "2": 1,
@@ -222,31 +118,51 @@ const sokratesSheetParent = async (master) => {
     },
     "frozen": {
       type: 'rangeBoth',
-      range: {row_focus: 0, column_focus: 2},
+      range: {row_focus: 0, column_focus: 1},
     },
     "luckysheet_select_save": [
+    ],
+    luckysheet_alternateformat_save: [],
+    luckysheet_conditionformat_save: [
+      // {
+      //   "type": "default",
+      //   "cellrange": [
+      //     {
+      //       "column": [1, 2], // kasih warna merah kalo duplicate student nis(1)
+      //       "row": [1, totalRows - 1],
+      //     }
+      //   ],
+      //   "format": {
+      //     "textColor": "#000000",
+      //     "cellColor": "#e35663"
+      //   },
+      //   "conditionName": "duplicateValue",
+      //   "conditionRange": [],
+      //   "conditionValue": ["0"]
+      // },
       {
-        "left": 963,
-        "width": 125,
-        "top": 240,
-        "height": 19,
-        "left_move": 963,
-        "width_move": 125,
-        "top_move": 240,
-        "height_move": 19,
-        "row": [
-          12,
-          12
+        "type": "default", //
+        "cellrange": [
+          {
+            "columnLookup": [0, 1, 2], // student_name(0) & nis(2) kalo di isi, baru jalanin validasi ini
+            "column": [...parentColumns.keys()].filter(i => parentColumns[i].r === true), // index dari column student yang required
+            "row": [1, totalRows - 1],
+          }
         ],
-        "column": [
-          7,
-          7
-        ],
-        "row_focus": 12,
-        "column_focus": 7
+        "format": {
+          "textColor": "#000000",
+          "cellColor": "#e35663"
+        },
+        "conditionName": "required", // ini custom logic nya ada di file conditionformat.js, terus cari: conditionName == "required"
+        "conditionRange": [],
+        "conditionValue": [],
       }
     ],
-    "dataVerification": {}
+    "filter_select": {
+      "row": [0, totalRows - 1],
+      "column": [1, totalColumns - 1],
+    },
+    "dataVerification": parentValidations,
   }
 };
 

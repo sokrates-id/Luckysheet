@@ -6,6 +6,7 @@ import serviceMain from "./services/serviceMain";
 import getStudentColumns from "./models/modelStudent";
 import {columnsWillLookupById} from "./models/modelGeneral";
 import serviceStudent from "./services/serviceStudent";
+import getParentColumns from "./models/modelParent";
 
 $(async function () {
   const config = await serviceMain.getConfig();
@@ -29,7 +30,7 @@ $(async function () {
   }
 
   const sheetStudent = await sokratesSheetStudent(config, master);
-  const sheetParent = await sokratesSheetParent(master);
+  const sheetParent = await sokratesSheetParent(config, master);
 
   let isSaving = false;
 
@@ -37,28 +38,7 @@ $(async function () {
     container: 'luckysheet',
     lang: 'en',
     title: 'Student Data',
-    // pager: {
-    // 	pageIndex: 1,
-    // 	pageSize: 10,
-    // 	total: 50,
-    // 	selectOption: [10, 20]
-    // },
     forceCalculation: false,
-    // plugins: ['chart'],
-    fontList: [
-      {
-        "fontName": "HanaleiFill",
-        "url": "./assets/iconfont/HanaleiFill-Regular.ttf"
-      },
-      {
-        "fontName": "Anton",
-        "url": "./assets/iconfont/Anton-Regular.ttf"
-      },
-      {
-        "fontName": "Pacifico",
-        "url": "./assets/iconfont/Pacifico-Regular.ttf"
-      }
-    ],
     hook: {
       cellDragStop: function (cell, postion, sheetFile, ctx, event) {
         // console.info(cell, postion, sheetFile, ctx, event);
@@ -180,11 +160,18 @@ $(async function () {
     $('.loading-save').css('display', 'flex');
     isSaving = true;
 
-    const data = luckysheet.getSheetData(0);
-
-    const studentColumns = getStudentColumns(master);
     const students = [];
-    const totalData = data.length;
+    const parents = [];
+
+    const masterGender = {
+      'Laki-laki': 'M',
+      'Perempuan': 'F',
+    };
+
+    luckysheet.sheetmanage.changeSheet(0);
+    const dataStudents = luckysheet.getAllSheets()[0].data;
+    const studentColumns = getStudentColumns(master);
+    const totalDataStudents = dataStudents.length;
 
     const now = new Date();
     const basedate = new Date(1899, 11, 31, 0, 0, 0);
@@ -192,8 +179,13 @@ $(async function () {
 
     let valid = true;
     let invalidColumn = 0;
+    let invalidColumnName = null;
     let invalidRow = 0;
-    for (let i = 0; i < totalData; i++) {
+    let invalidRowName = null;
+
+    // students
+    for (let i = 0; i < totalDataStudents; i++) {
+      // skip headernya
       if (i === 0) {
         continue;
       }
@@ -202,7 +194,7 @@ $(async function () {
 
       // kalo student_name (0) & nis (2)
       // kosong, gaperlu di save
-      if (!data[i][0].v || !data[i][2].v) {
+      if (!dataStudents[i][0].v || !dataStudents[i][2].v) {
         continue;
       }
 
@@ -212,23 +204,29 @@ $(async function () {
 
       for (let j = 0; j < studentColumns.length; j++) {
 
-        if (data[i][j].inv === true) {
+        // validasi kalo column required & valuenya gaada
+        if (studentColumns[j].r && !dataStudents[i][j].v) {
           valid = false;
 
           invalidRow = i;
-          invalidColumn = j ;
+          invalidRowName = dataStudents[i][0].v;
+          invalidColumn = j;
+          invalidColumnName = studentColumns[j].n;
           break;
         }
 
-        if (data[i] && data[i][j] && data[i][j].v) {
+        if (dataStudents[i] && dataStudents[i][j] && dataStudents[i][j].v) {
 
           let columnName = studentColumns[j].c ? studentColumns[j].c : 0;
           let willLookupValueById = columnsWillLookupById[columnName];
-          let value = data[i][j].v;
+          let value = dataStudents[i][j].v;
+
+          if (columnName === 'gender') {
+            value = masterGender[value];
+          }
 
           if (studentColumns[j].t === 'date') {
             // convert date format
-            // value = numdate(data[i][j].v).toISOString().slice(0, 10);
             if (!isNaN(value)) {
               now.setTime(+value * 24 * 60 * 60 * 1000 + dnthresh);
               value = now.toISOString().slice(0, 10);
@@ -256,8 +254,90 @@ $(async function () {
       students.push(student);
     }
 
-    console.log(students);
-    console.error('invalid data di row col', valid);
+    if (valid) {
+      // parents
+
+      luckysheet.sheetmanage.changeSheet(1);
+      const dataParents = luckysheet.getAllSheets()[1].data;
+      const parentColumns = getParentColumns(master);
+      const totalDataParents = dataParents.length;
+
+      for (let i = 0; i < totalDataParents; i++) {
+        // skip headernya
+        if (i === 0) {
+          continue;
+        }
+
+        let parent = {};
+
+        // kalo student_name (0) & nis (1) & parent_type (2)
+        // kosong, gaperlu di save
+        if (
+          !dataParents[i][0].v
+          || !dataParents[i][1].v
+          || !dataParents[i][2].v
+        ) {
+          continue;
+        }
+
+        if (!valid) {
+          break;
+        }
+
+        for (let j = 0; j < parentColumns.length; j++) {
+
+          // validasi kalo column required & valuenya gaada
+          if (parentColumns[j].r && !dataParents[i][j].v) {
+            valid = false;
+
+            invalidRow = i;
+            invalidRowName = dataParents[i][0].v;
+            invalidColumn = j;
+            invalidColumnName = parentColumns[j].n;
+            break;
+          }
+
+          if (dataParents[i] && dataParents[i][j] && dataParents[i][j].v) {
+
+            let columnName = parentColumns[j].c ? parentColumns[j].c : 0;
+            let willLookupValueById = columnsWillLookupById[columnName];
+            let value = dataParents[i][j].v;
+
+            if (columnName === 'gender') {
+              value = masterGender[value];
+            }
+
+            if (parentColumns[j].t === 'date') {
+              // convert date format
+              if (!isNaN(value)) {
+                now.setTime(+value * 24 * 60 * 60 * 1000 + dnthresh);
+                value = now.toISOString().slice(0, 10);
+              } else {
+                value = undefined;
+              }
+            }
+
+            if (willLookupValueById) {
+              value = +master[willLookupValueById].valuesByName[value];
+              if (isNaN(value)) {
+                value = null
+              }
+            }
+
+            if (
+              value !== null
+              && value !== undefined
+            ) {
+              parent[columnName] = value;
+            }
+          }
+        }
+
+        parents.push(parent);
+
+      }
+
+    }
 
     if (!valid) {
       luckysheet.hideLoadingProgress();
@@ -269,7 +349,10 @@ $(async function () {
         targetRow: invalidRow - 2, // tergantung yang fixed row ada berapa
         targetColumn: invalidColumn - 2, // tergantung yang fixed column ada berapa
         success: () => {
-          luckysheet.setluckysheet_select_save([{ row: [invalidRow, invalidRow], column: [invalidColumn, invalidColumn] }]);
+          luckysheet.setluckysheet_select_save([{
+            row: [invalidRow, invalidRow],
+            column: [invalidColumn, invalidColumn]
+          }]);
           luckysheet.selectHightlightShow();
         },
       })
@@ -277,14 +360,21 @@ $(async function () {
       $("#luckysheet-modal-dialog-mask").show();
       $("#luckysheet-info").remove();
       const replaceHtml = (temp, dataarry) => {
-        return temp.replace(/\$\{([\w]+)\}/g, function (s1, s2) { let s = dataarry[s2]; if (typeof (s) != "undefined") { return s; } else { return s1; } });
+        return temp.replace(/\$\{([\w]+)\}/g, function (s1, s2) {
+          let s = dataarry[s2];
+          if (typeof (s) != "undefined") {
+            return s;
+          } else {
+            return s1;
+          }
+        });
       };
       const modelHTML = '<div id="${id}" style="${style}" class="luckysheet-modal-dialog ${addclass}" tabindex="0" role="dialog" aria-labelledby=":41e" dir="ltr"> <div class="luckysheet-modal-dialog-title luckysheet-modal-dialog-title-draggable"> <span class="luckysheet-modal-dialog-title-text" role="heading">${title}</span>	 <span class="luckysheet-modal-dialog-title-close" role="button" tabindex="0" aria-label="${close}"><i class="fa fa-times" aria-hidden="true"></i></span> </div> <div class="luckysheet-modal-dialog-content">${content}</div> <div class="luckysheet-modal-dialog-buttons">	 ${botton} </div></div>';
       $("body").append(replaceHtml(modelHTML, {
         "id": "luckysheet-info",
         "addclass": "",
         "title": 'error',
-        "content": `ada data yang salah di baris ${invalidRow} column ${invalidColumn}`,
+        "content": `ada data yang salah di baris ${invalidRow + 1} column ${invalidColumnName}`,
         "botton": '<button class="btn btn-default luckysheet-model-close-btn">&nbsp;&nbsp;close&nbsp;&nbsp;</button>',
         "style": "z-index:100003"
       }));
@@ -301,13 +391,22 @@ $(async function () {
     serviceStudent
       .saveStudent(config, {
         students,
+        parents,
       })
       .then(res => {
-        isSaving = false;
-        luckysheet.hideLoadingProgress();
-        // $('.loading-text').text('proses data sekolah selesai');
-        $('.loading-save').hide();
-        console.log(res);
+        // isSaving = false;
+        // luckysheet.hideLoadingProgress();
+
+        let timeLeft = 5;
+        let downloadTimer = setInterval(function(){
+          timeLeft--;
+          $('.loading-save-text').text(`proses menyimpan data SELESAI, browser akan refresh dalam ${timeLeft} detik`);
+          if(timeLeft <= 0) {
+            clearInterval(downloadTimer);
+            window.location.reload();
+          }
+        },1000);
+
       })
       .catch(err => {
         isSaving = false;

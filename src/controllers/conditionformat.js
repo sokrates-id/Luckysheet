@@ -3575,7 +3575,6 @@ const conditionformat = {
                                 for(let x in dmap){
                                     if(x != "null" && x != "undefined" && dmap[x].length > 1){
                                         for(let j = 0; j < dmap[x].length; j++){
-                                            dmap[x][j].inv = true;
                                             if((dmap[x][j].r + "_" + dmap[x][j].c) in computeMap){
                                                 computeMap[dmap[x][j].r + "_" + dmap[x][j].c]["textColor"] = textColor;
                                                 computeMap[dmap[x][j].r + "_" + dmap[x][j].c]["cellColor"] = cellColor;
@@ -3764,7 +3763,7 @@ const conditionformat = {
                                 }
                             }
                         }
-                        else if(conditionName == "required"){
+                        else if(conditionName == "required" && cellrange[s].columnLookup){
                             for(let r = cellrange[s].row[0]; r <= cellrange[s].row[1]; r++){
                                 if(d[r] == null){
                                     continue;
@@ -3788,7 +3787,6 @@ const conditionformat = {
 
                                 for(let c of cellrange[s].column){
                                     if(getObjType(d[r][c]) != "object" || isRealNull( d[r][c].v)){
-                                        d[r][c].inv = true;
                                         if((r + "_" + c) in computeMap){
                                             computeMap[r + "_" + c]["textColor"] = textColor;
                                             computeMap[r + "_" + c]["cellColor"] = cellColor;

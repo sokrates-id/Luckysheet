@@ -99,7 +99,7 @@ const sokratesSheetStudent = async (config, master) => {
 
   return {
     "name": "Student",
-    "index": "Sheet_pdolzzie5xwi_1600927444446",
+    "index": 0,
     celldata: studentCells,
     "row": totalRows,
     "column": totalColumns.length - 1,
@@ -142,7 +142,7 @@ const sokratesSheetStudent = async (config, master) => {
         "type": "default",
         "cellrange": [
           {
-            "column": [3, 3], // kasih warna merah kalo duplicate student nis(3)
+            "column": [2, 2], // kasih warna merah kalo duplicate student nis(2)
             "row": [1, totalRows - 1],
           }
         ],

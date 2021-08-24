@@ -1,25 +1,23 @@
-const transportData = [
-  'On Foot',
-  'Motocycle',
-  'Private Car',
-  'Bicycle',
-  'Public Transportation (Angkot, Bus)',
-  'Train',
-  'Ojek',
-  'Other'
-];
 const childStatusData = [
   'Biological Child',
   'Foster Child',
   'Step Child'
 ];
-const livingWithData = [
-  'Father',
-  'Mother',
-  'Both Parents',
-  'Guardian',
-  'Dormitory',
-  'Boarding House'
+const parentEducationData = [
+  'None',
+  'SD',
+  'SMP',
+  'SMA',
+  'D3',
+  'D4/S1',
+  'S2',
+  'S3'
+];
+const parentSalaryData = [
+  '< Rp. 1.000.000',
+  'Rp. 1.000.000 - Rp. 3.000.000',
+  'Rp. 3.000.000 - Rp. 5.000.000',
+  '> Rp. 5.000.000'
 ];
 
 /**
@@ -30,8 +28,7 @@ const livingWithData = [
  * r: required apa engga
  * v: validasinya
  */
-const getStudentColumns = (master) => {
-
+const getParentColumns = (master) => {
   return [
     {
       c: 'student_name',
@@ -43,23 +40,6 @@ const getStudentColumns = (master) => {
         "type2": "bw",
         "value1": "1",
         "value2": "255",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      },
-    },
-    {
-      c: 'student_nickname',
-      n: 'Nama Panggilan Siswa',
-      w: 150,
-      r: true,
-      v: {
-        "type": "text_length",
-        "type2": "bw",
-        "value1": "1",
-        "value2": "50",
         "checked": false,
         "remote": false,
         "prohibitInput": true,
@@ -85,31 +65,14 @@ const getStudentColumns = (master) => {
       },
     },
     {
-      c: 'enrollment_status',
-      n: 'Status Pendaftaran',
-      w: 120,
-      r: true,
-      v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": "NORMAL,TRANSFER",
-        "value2": "",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      }
-    },
-    {
-      c: 'enroll_school_location_id',
-      n: 'Nama Sekolah',
+      c: 'parent_type',
+      n: 'Orangtua',
       w: 150,
       r: true,
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": master.schools.names.join(','),
+        "value1": "Father,Mother,Guardian",
         "value2": "",
         "checked": false,
         "remote": false,
@@ -119,45 +82,38 @@ const getStudentColumns = (master) => {
       }
     },
     {
-      c: 'enroll_school_level_id',
-      n: 'Jenjang Pendidikan',
+      c: 'parent_name',
+      n: 'Nama Orangtua',
+      w: 200,
+      r: true,
+      v: {
+        "type": "text_length",
+        "type2": "bw",
+        "value1": "1",
+        "value2": "100",
+        "checked": false,
+        "remote": false,
+        "prohibitInput": true,
+        "hintShow": false,
+        "hintText": ""
+      },
+    },
+    {
+      c: 'address_line1',
+      n: 'Alamat Lengkap',
       w: 150,
       r: true,
       v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": master.schoolLevels.names.join(','),
-        "value2": "",
+        "type": "text_length",
+        "type2": "bw",
+        "value1": "1",
+        "value2": "1000",
         "checked": false,
         "remote": false,
         "prohibitInput": true,
         "hintShow": false,
         "hintText": ""
-      }
-    },
-    {
-      c: 'enroll_year_level_id',
-      n: 'Tingkat Sekolah',
-      w: 150,
-      r: true,
-      v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": master.yearLevels.names.join(','),
-        "value2": "",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      }
-    },
-    {
-      t: 'date',
-      c: 'join_date_school',
-      n: 'Tanggal Masuk',
-      w: 100,
-      r: true,
+      },
     },
     {
       c: 'gender',
@@ -180,7 +136,6 @@ const getStudentColumns = (master) => {
       c: 'place_of_birth',
       n: 'Tempat Lahir',
       w: 150,
-      r: true,
       v: {
         "type": "text_length",
         "type2": "bw",
@@ -194,45 +149,10 @@ const getStudentColumns = (master) => {
       },
     },
     {
-      t: 'date',
       c: 'date_of_birth',
+      t: 'date',
       n: 'Tanggal Lahir',
       w: 150,
-      r: true,
-    },
-    {
-      c: 'email',
-      n: 'Email',
-      w: 150,
-      r: true,
-      v: {
-        "type": "text_length",
-        "type2": "bw",
-        "value1": "1",
-        "value2": "100",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      },
-    },
-    {
-      c: 'address_line1',
-      n: 'Alamat Lengkap',
-      w: 200,
-      r: true,
-      v: {
-        "type": "text_length",
-        "type2": "bw",
-        "value1": "1",
-        "value2": "1000",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      },
     },
     {
       c: 'religion_id',
@@ -249,16 +169,6 @@ const getStudentColumns = (master) => {
         "hintShow": false,
         "hintText": ""
       }
-    },
-    {
-      c: 'nisn',
-      n: 'NISN',
-      w: 100,
-    },
-    {
-      c: 'admission_form_id',
-      n: 'Nomor Formulir Pendaftaran',
-      w: 100,
     },
     {
       c: 'nationality_id',
@@ -287,8 +197,8 @@ const getStudentColumns = (master) => {
       w: 100,
     },
     {
-      t: 'date',
       c: 'passport_expired_date',
+      t: 'date',
       n: 'Tanggal Berakhir Paspor',
       w: 100,
     },
@@ -298,14 +208,9 @@ const getStudentColumns = (master) => {
       w: 100,
     },
     {
-      t: 'date',
       c: 'kitas_expired_date',
+      t: 'date',
       n: 'Tanggal Berakhir KITAS',
-      w: 100,
-    },
-    {
-      c: 'most_used_lang',
-      n: 'Bahasa',
       w: 100,
     },
     {
@@ -317,6 +222,11 @@ const getStudentColumns = (master) => {
       c: 'cellular_number',
       n: 'Nomor Telepon',
       w: 100,
+    },
+    {
+      c: 'email',
+      n: 'Email',
+      w: 150,
     },
     {
       c: 'postal_code',
@@ -371,13 +281,23 @@ const getStudentColumns = (master) => {
       }
     },
     {
-      c: 'living_with',
-      n: 'Tinggal Bersama',
+      c: 'employment_company',
+      n: 'Perusahaan',
+      w: 100,
+    },
+    {
+      c: 'job_title',
+      n: 'Jabatan',
+      w: 100,
+    },
+    {
+      c: 'salary_range',
+      n: 'Kisaran Gaji',
       w: 100,
       v: {
         "type": "dropdown",
         "type2": null,
-        "value1": livingWithData.join(','),
+        "value1": parentSalaryData.join(','),
         "value2": "",
         "checked": false,
         "remote": false,
@@ -387,29 +307,8 @@ const getStudentColumns = (master) => {
       }
     },
     {
-      c: 'distance_to_school',
-      n: 'Jarak Ke Sekolah',
-      w: 100,
-    },
-    {
-      c: 'transport_to_school',
-      n: 'Transportasi Ke Sekolah',
-      w: 100,
-      v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": transportData.join(','),
-        "value2": "",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      }
-    },
-    {
-      c: 'child_status',
-      n: 'Status Anak',
+      c: 'relationship_to_student',
+      n: 'Hubungan dengan Anak',
       w: 100,
       v: {
         "type": "dropdown",
@@ -424,10 +323,32 @@ const getStudentColumns = (master) => {
       }
     },
     {
+      c: 'last_education',
+      n: 'Pendidikan Terakhir',
+      w: 150,
+      v: {
+        "type": "dropdown",
+        "type2": null,
+        "value1": parentEducationData.join(','),
+        "value2": "",
+        "checked": false,
+        "remote": false,
+        "prohibitInput": true,
+        "hintShow": false,
+        "hintText": ""
+      }
+    },
+    {
       c: 'student_id',
       n: 'student_id',
       w: 70,
     },
+    {
+      c: 'student_parent_id',
+      n: 'student_parent_id',
+      w: 70,
+    },
   ];
 }
-export default getStudentColumns;
+
+export default getParentColumns;
