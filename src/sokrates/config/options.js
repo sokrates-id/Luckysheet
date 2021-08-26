@@ -17,9 +17,9 @@ const sokratesOptions = {
     textColor: false, //'Text color'
     fillColor: false, //'Cell color'
     border: false, //'border'
-    mergeCell: false, //'Merge cells'
+    mergeCell: true, //'Merge cells'
     horizontalAlignMode: false, //'Horizontal alignment'
-    verticalAlignMode: false, //'Vertical alignment'
+    verticalAlignMode: true, //'Vertical alignment'
     textWrapMode: false, //'Wrap mode'
     textRotateMode: false, //'Text Rotation Mode'
     image: false, // 'Insert picture'
@@ -35,7 +35,7 @@ const sokratesOptions = {
     splitColumn: false, //'Split column'
     screenshot: false, //'screenshot'
     findAndReplace: true, //'Find and Replace'
-    protection: false, // 'Worksheet protection'
+    protection: true, // 'Worksheet protection'
     print: false, // 'Print'
   },
   showinfobar: true,

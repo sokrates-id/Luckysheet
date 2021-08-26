@@ -1184,7 +1184,9 @@ const alternateformat = {
                     //中间行
                     for(let r = st_r; r <= ed_r; r++){
                         let fc, bc;
-                        if((r - st_r) % 2 == 0){
+                        // ini custom khusus PARENT
+                        if(((r - st_r)  % 6 / 2) <= 1){
+                        // if((r - st_r) % 2 == 0){
                             fc = format["one"].fc;
                             bc = format["one"].bc;
                         }

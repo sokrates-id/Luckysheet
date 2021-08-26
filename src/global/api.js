@@ -112,6 +112,7 @@ export function setCellValue(row, column, value, options = {}) {
     let {
         order = getSheetIndex(Store.currentSheetIndex),
         isRefresh = true,
+        hookStop = false, // ini tambahan sokrates, biarga looping terus
         success
     } = {...options}
 
@@ -215,11 +216,13 @@ export function setCellValue(row, column, value, options = {}) {
         }
     }
 
-    /* cell更新后触发  */
-    setTimeout(() => {
-        // Hook function
-        method.createHookFunction("cellUpdated", row, column, JSON.parse(oldValue), Store.flowdata[row][column], isRefresh);
-    }, 0);
+    if (!hookStop) {
+        /* cell更新后触发  */
+        setTimeout(() => {
+            // Hook function
+            method.createHookFunction("cellUpdated", row, column, JSON.parse(oldValue), Store.flowdata[row][column], isRefresh, hookStop);
+        }, 0);
+    }
 
     if(file.index == Store.currentSheetIndex && isRefresh){
         jfrefreshgrid(data, [{ "row": [row, row], "column": [column, column] }]);//update data, meanwhile refresh canvas and store data to history

@@ -2,13 +2,14 @@ import getParentColumns from "../models/modelParent";
 import serviceStudent from "../services/serviceStudent";
 import {columnsWillLookupById} from "../models/modelGeneral";
 
-const sokratesSheetParent = async (config, master) => {
+const sokratesSheetParent = async (config, master, students) => {
 
   const parents = await serviceStudent.getParents(config);
 
   const parentColumns = getParentColumns(master);
 
-  const totalRows = parents.length + 100;
+  // student punya 3 parent type, terserah mau diisi yang mana
+  const totalRows = (students.length * 3) + 100;
   const totalColumns = parentColumns.length;
 
   const parentValidations = {};
@@ -44,7 +45,7 @@ const sokratesSheetParent = async (config, master) => {
   parentCells = [...parentHeaders];
   let arrParentsLength = parents.length;
 
-
+  const parentTypes = ['Father', 'Mother', 'Guardian'];
   for (let i = 0; i < totalColumns; i++) {
     let ct = {
       "fa": "@", "t": "s",
@@ -60,22 +61,74 @@ const sokratesSheetParent = async (config, master) => {
 
     let willLookupValueById = columnsWillLookupById[columnName];
 
-    for (let j = 1; j < totalRows; j++) {
+    for (let j = 0; j < totalRows; j++) {
 
+      // if (
+      //   (
+      //     columnName === 'student_id'
+      //     || columnName === 'student_name'
+      //     || columnName === 'nis'
+      //   )
+      //   && Math.floor(j % 3) > 0
+      // ) {
+      //   continue;
+      // }
 
-      let value = j < arrParentsLength ? parents[j][columnName] : null;
+      let value = null;
+
+      if (
+        (
+          columnName === 'student_id'
+          || columnName === 'student_name'
+          || columnName === 'nis'
+        )
+        // && Math.floor(j % 3) === 0
+      ) {
+
+        value = j < (students.length * 3) ? students[Math.floor(j / 3)][columnName] : null;
+      } else if (columnName === 'parent_type') {
+        value = j < (students.length * 3) ? parentTypes[Math.floor(j % 3)] : null;
+      } else {
+
+        if (j < (students.length * 3)) {
+          let studentId = students[Math.floor(j / 3)]['student_id'];
+          let parent = parents.find(i => i.student_id === studentId && i.parent_type === parentTypes[Math.floor(j % 3)]);
+
+          if (parent) {
+            value = parent[columnName];
+          }
+        }
+
+        // let value = j < arrParentsLength ? parents[j][columnName] : null;
+      }
+
 
       if (willLookupValueById) {
         value = master[willLookupValueById].valuesById[+value];
       }
 
       parentCells.push({
-        r: j,
+        r: j + 1,
         c: i,
         v: {
           ct,
           v: value,
           m: value,
+          vt: 1, // vertical align tengah
+          ht: 1,
+          // mc: {
+          //   r: j + 1,
+          //   c: i,
+          //   rs: (
+          //     (
+          //       columnName === 'student_id'
+          //       || columnName === 'student_name'
+          //       || columnName === 'nis'
+          //     )
+          //     && Math.floor(j % 3) === 0
+          //   ) ? 3 : 1,
+          //   cs: 1,
+          // },
         },
       });
     }
@@ -120,9 +173,35 @@ const sokratesSheetParent = async (config, master) => {
       type: 'rangeBoth',
       range: {row_focus: 0, column_focus: 1},
     },
-    "luckysheet_select_save": [
+    "luckysheet_select_save": [],
+    luckysheet_alternateformat_save: [
+      // {
+      //   "cellrange": {
+      //     "row": [1, students.length * 3],
+      //     "column": [0, parentHeaders.length - 1]
+      //   },
+      //   "format": {
+      //     "head": {
+      //       "fc": "#000",
+      //       "bc": "#5ed593"
+      //     },
+      //     "one": {
+      //       "fc": "#000",
+      //       "bc": "#ffffff"
+      //     },
+      //     "two": {
+      //       "fc": "#000",
+      //       "bc": "#e5fbee"
+      //     },
+      //     "foot": {
+      //       "fc": "#000",
+      //       "bc": "#a5efcc"
+      //     }
+      //   },
+      //   "hasRowHeader": false,
+      //   "hasRowFooter": false
+      // }
     ],
-    luckysheet_alternateformat_save: [],
     luckysheet_conditionformat_save: [
       // {
       //   "type": "default",
@@ -140,27 +219,27 @@ const sokratesSheetParent = async (config, master) => {
       //   "conditionRange": [],
       //   "conditionValue": ["0"]
       // },
-      {
-        "type": "default", //
-        "cellrange": [
-          {
-            "columnLookup": [0, 1, 2], // student_name(0) & nis(2) kalo di isi, baru jalanin validasi ini
-            "column": [...parentColumns.keys()].filter(i => parentColumns[i].r === true), // index dari column student yang required
-            "row": [1, totalRows - 1],
-          }
-        ],
-        "format": {
-          "textColor": "#000000",
-          "cellColor": "#e35663"
-        },
-        "conditionName": "required", // ini custom logic nya ada di file conditionformat.js, terus cari: conditionName == "required"
-        "conditionRange": [],
-        "conditionValue": [],
-      }
+      // {
+      //   "type": "default", //
+      //   "cellrange": [
+      //     {
+      //       "columnLookup": [0, 1, 2], // student_name(0) & nis(2) kalo di isi, baru jalanin validasi ini
+      //       "column": [...parentColumns.keys()].filter(i => parentColumns[i].r === true), // index dari column student yang required
+      //       "row": [1, totalRows - 1],
+      //     }
+      //   ],
+      //   "format": {
+      //     "textColor": "#000000",
+      //     "cellColor": "#e35663"
+      //   },
+      //   "conditionName": "required", // ini custom logic nya ada di file conditionformat.js, terus cari: conditionName == "required"
+      //   "conditionRange": [],
+      //   "conditionValue": [],
+      // }
     ],
     "filter_select": {
       "row": [0, totalRows - 1],
-      "column": [1, totalColumns - 1],
+      "column": [0, totalColumns - 3],
     },
     "dataVerification": parentValidations,
   }

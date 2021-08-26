@@ -2,9 +2,7 @@ import serviceStudent from '../services/serviceStudent';
 import getStudentColumns from "../models/modelStudent";
 import {columnsWillLookupById} from "../models/modelGeneral";
 
-const sokratesSheetStudent = async (config, master) => {
-
-  const students = await serviceStudent.getStudents(config);
+const sokratesSheetStudent = async (config, master, students) => {
 
   const studentColumns = getStudentColumns(master);
 
@@ -64,7 +62,7 @@ const sokratesSheetStudent = async (config, master) => {
 
     let willLookupValueById = columnsWillLookupById[columnName];
 
-    for (let j = 1; j < totalRows; j++) {
+    for (let j = 0; j < totalRows; j++) {
 
 
       let value = j < arrStudentsLength ? students[j][columnName] : null;
@@ -86,7 +84,7 @@ const sokratesSheetStudent = async (config, master) => {
       // };
 
       studentCells.push({
-        r: j,
+        r: j + 1,
         c: i,
         v: {
           ct,
@@ -138,46 +136,46 @@ const sokratesSheetStudent = async (config, master) => {
     },
     luckysheet_alternateformat_save: [],
     luckysheet_conditionformat_save: [
-      {
-        "type": "default",
-        "cellrange": [
-          {
-            "column": [2, 2], // kasih warna merah kalo duplicate student nis(2)
-            "row": [1, totalRows - 1],
-          }
-        ],
-        "format": {
-          "textColor": "#000000",
-          "cellColor": "#e35663"
-        },
-        "conditionName": "duplicateValue",
-        "conditionRange": [],
-        "conditionValue": ["0"]
-      },
-      {
-        "type": "default", //
-        "cellrange": [
-          {
-            "columnLookup": [0, 2], // student_name(0) & nis(2) kalo di isi, baru jalanin validasi ini
-            "column": [...studentColumns.keys()].filter(i => studentColumns[i].r === true), // index dari column student yang required
-            "row": [1, totalRows - 1],
-          }
-        ],
-        "format": {
-          "textColor": "#000000",
-          "cellColor": "#e35663"
-        },
-        "conditionName": "required", // ini custom logic nya ada di file conditionformat.js, terus cari: conditionName == "required"
-        "conditionRange": [],
-        "conditionValue": [],
-      }
+      // {
+      //   "type": "default",
+      //   "cellrange": [
+      //     {
+      //       "column": [2, 2], // kasih warna merah kalo duplicate student nis(2)
+      //       "row": [1, totalRows - 1],
+      //     }
+      //   ],
+      //   "format": {
+      //     "textColor": "#000000",
+      //     "cellColor": "#e35663"
+      //   },
+      //   "conditionName": "duplicateValue",
+      //   "conditionRange": [],
+      //   "conditionValue": ["0"]
+      // },
+      // {
+      //   "type": "default", //
+      //   "cellrange": [
+      //     {
+      //       "columnLookup": [0, 2], // student_name(0) & nis(2) kalo di isi, baru jalanin validasi ini
+      //       "column": [...studentColumns.keys()].filter(i => studentColumns[i].r === true), // index dari column student yang required
+      //       "row": [1, totalRows - 1],
+      //     }
+      //   ],
+      //   "format": {
+      //     "textColor": "#000000",
+      //     "cellColor": "#e35663"
+      //   },
+      //   "conditionName": "required", // ini custom logic nya ada di file conditionformat.js, terus cari: conditionName == "required"
+      //   "conditionRange": [],
+      //   "conditionValue": [],
+      // }
     ],
-    "filter_select": {
-      "row": [0, totalRows - 1],
-      "column": [1, totalColumns - 1],
-    },
+    // "filter_select": {
+    //   "row": [0, totalRows - 1],
+    //   "column": [0, totalColumns - 2],
+    // },
     luckysheet_select_save: [],
-    dataVerification: studentValidations,
+    // dataVerification: studentValidations,
   }
 }
 

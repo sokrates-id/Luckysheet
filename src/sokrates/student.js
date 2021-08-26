@@ -29,8 +29,10 @@ $(async function () {
     provinces,
   }
 
-  const sheetStudent = await sokratesSheetStudent(config, master);
-  const sheetParent = await sokratesSheetParent(config, master);
+  const students = await serviceStudent.getStudents(config);
+
+  const sheetStudent = await sokratesSheetStudent(config, master, students);
+  const sheetParent = await sokratesSheetParent(config, master, students);
 
   let isSaving = false;
 
@@ -82,8 +84,44 @@ $(async function () {
       cellUpdateBefore: function (r, c, value, isRefresh) {
         // console.info('cellUpdateBefore',r,c,value,isRefresh)
       },
-      cellUpdated: function (r, c, oldValue, newValue, isRefresh) {
-        // console.info('cellUpdated',r,c,oldValue, newValue, isRefresh)
+      cellUpdated: function (r, c, oldValue, newValue, isRefresh, hookStop) {
+        console.info('cellUpdated', r, c, oldValue, newValue, isRefresh, hookStop);
+
+        if (hookStop) {
+          return;
+        }
+
+        const curSheet = luckysheet.sheetmanage.getCurSheet();
+        if (curSheet === 0) {
+
+          // handler student data update (student name, student nis), ganti ke sheet parent juga
+
+          let cParent = -1;
+          if (c === 0) { // column student name
+            cParent = 0;
+          } else if (c === 2) { // column nis
+            cParent = 1;
+          }
+
+          if (cParent < 0) {
+            return;
+          }
+
+          // 3 karena ada 3 parent_type (father, mother, guardian)
+          const rParentStart = ((r - 1) * 3) + 1;
+          const rParentEnd = rParentStart + 3;
+
+          for (let rParent = rParentStart; rParent < rParentEnd; rParent++) {
+
+            luckysheet.setCellValue(rParent, cParent, newValue, {
+              order: 1,
+              hookStop: true,
+            });
+          }
+
+        } else if (curSheet === 1) {
+          // handler parent data
+        }
       },
       sheetActivate: function (index, isPivotInitial, isNewSheet) {
         // console.info(index, isPivotInitial, isNewSheet)
@@ -116,11 +154,13 @@ $(async function () {
         // console.info(json)
       },
       rangePasteBefore: function (range, data) {
-        // console.info('rangePasteBefore',range,data)
+        console.info('rangePasteBefore',range,data)
         // return false; //Can intercept paste
       },
-
-
+      rangePasteAfter: function (range, data) {
+        console.info('rangePasteAfter', range, data)
+        // return false; //Can intercept paste
+      },
     },
     loading: {
       image: () => {
@@ -270,12 +310,13 @@ $(async function () {
 
         let parent = {};
 
-        // kalo student_name (0) & nis (1) & parent_type (2)
+        // kalo student_name (0) & nis (1) & parent_type (2) & parent_name (3)
         // kosong, gaperlu di save
         if (
           !dataParents[i][0].v
           || !dataParents[i][1].v
           || !dataParents[i][2].v
+          || !dataParents[i][3].v
         ) {
           continue;
         }
@@ -398,14 +439,14 @@ $(async function () {
         // luckysheet.hideLoadingProgress();
 
         let timeLeft = 5;
-        let downloadTimer = setInterval(function(){
+        let downloadTimer = setInterval(function () {
           timeLeft--;
           $('.loading-save-text').text(`proses menyimpan data SELESAI, browser akan refresh dalam ${timeLeft} detik`);
-          if(timeLeft <= 0) {
+          if (timeLeft <= 0) {
             clearInterval(downloadTimer);
             window.location.reload();
           }
-        },1000);
+        }, 1000);
 
       })
       .catch(err => {

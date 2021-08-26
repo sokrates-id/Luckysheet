@@ -238,17 +238,17 @@ const getStudentColumns = (master) => {
       c: 'religion_id',
       n: 'Agama',
       w: 100,
-      v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": master.religions.names.join(','),
-        "value2": "",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      }
+      // v: {
+      //   "type": "dropdown",
+      //   "type2": null,
+      //   "value1": master.religions.names.join(','),
+      //   "value2": "",
+      //   "checked": false,
+      //   "remote": false,
+      //   "prohibitInput": true,
+      //   "hintShow": false,
+      //   "hintText": ""
+      // }
     },
     {
       c: 'nisn',
@@ -264,17 +264,17 @@ const getStudentColumns = (master) => {
       c: 'nationality_id',
       n: 'Kewarganegaraan',
       w: 100,
-      v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": master.nationalities.names.join(','),
-        "value2": "",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      }
+      // v: {
+      //   "type": "dropdown",
+      //   "type2": null,
+      //   "value1": master.nationalities.names.join(','),
+      //   "value2": "",
+      //   "checked": false,
+      //   "remote": false,
+      //   "prohibitInput": true,
+      //   "hintShow": false,
+      //   "hintText": ""
+      // }
     },
     {
       c: 'identification_number',
@@ -342,33 +342,33 @@ const getStudentColumns = (master) => {
       c: 'province_id',
       n: 'Provinsi',
       w: 100,
-      v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": master.provinces.names.join(','),
-        "value2": "",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      }
+      // v: {
+      //   "type": "dropdown",
+      //   "type2": null,
+      //   "value1": master.provinces.names.join(','),
+      //   "value2": "",
+      //   "checked": false,
+      //   "remote": false,
+      //   "prohibitInput": true,
+      //   "hintShow": false,
+      //   "hintText": ""
+      // }
     },
     {
       c: 'country_id',
       n: 'Negara',
       w: 100,
-      v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": master.countries.names.join(','),
-        "value2": "",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      }
+      // v: {
+      //   "type": "dropdown",
+      //   "type2": null,
+      //   "value1": master.countries.names.join(','),
+      //   "value2": "",
+      //   "checked": false,
+      //   "remote": false,
+      //   "prohibitInput": true,
+      //   "hintShow": false,
+      //   "hintText": ""
+      // }
     },
     {
       c: 'living_with',
@@ -395,33 +395,33 @@ const getStudentColumns = (master) => {
       c: 'transport_to_school',
       n: 'Transportasi Ke Sekolah',
       w: 100,
-      v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": transportData.join(','),
-        "value2": "",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      }
+      // v: {
+      //   "type": "dropdown",
+      //   "type2": null,
+      //   "value1": transportData.join(','),
+      //   "value2": "",
+      //   "checked": false,
+      //   "remote": false,
+      //   "prohibitInput": true,
+      //   "hintShow": false,
+      //   "hintText": ""
+      // }
     },
     {
       c: 'child_status',
       n: 'Status Anak',
       w: 100,
-      v: {
-        "type": "dropdown",
-        "type2": null,
-        "value1": childStatusData.join(','),
-        "value2": "",
-        "checked": false,
-        "remote": false,
-        "prohibitInput": true,
-        "hintShow": false,
-        "hintText": ""
-      }
+      // v: {
+      //   "type": "dropdown",
+      //   "type2": null,
+      //   "value1": childStatusData.join(','),
+      //   "value2": "",
+      //   "checked": false,
+      //   "remote": false,
+      //   "prohibitInput": true,
+      //   "hintShow": false,
+      //   "hintText": ""
+      // }
     },
     {
       c: 'student_id',
