@@ -130,9 +130,9 @@ const getConfig = async () => {
       {
         token,
         username: user.name,
-        backUrl,
       },
-      params
+      params,
+      backUrl,
     );
 
   } catch (e) {
