@@ -1,4 +1,4 @@
-const sokratesOptions = (auth) => {
+const sokratesOptions = (auth, backUrl) => {
 
   return {
     showtoolbar: true,
@@ -73,7 +73,7 @@ const sokratesOptions = (auth) => {
     // ],
 
     //
-    myFolderUrl: '/',
+    myFolderUrl: backUrl,
     functionButton: `
 <button id="excel-save" class="btn btn-primary btn-sucess" style=" padding:3px 6px; font-size: 12px; margin-right: 10px;">SAVE</button>`,
     cellRightClickConfig: {

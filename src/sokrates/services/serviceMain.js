@@ -3,8 +3,9 @@ import {errorHandlerHttp} from "../libs/errorHandler";
 // const apiUrl = 'https://api.sokrates.co.id';
 const apiUrl = 'https://api.sokrates.xyz';
 
-const apiResult = (auth, params) => {
+const apiResult = (auth, params, backUrl) => {
   return {
+    back_url: backUrl,
     auth: {
       username: auth.username,
       token: auth.token,
@@ -62,10 +63,23 @@ const getConfig = async () => {
 
   const url = window.location;
   const token = new URLSearchParams(url.search).get('token');
+  const backUrl = new URLSearchParams(url.search).get('back_url');
   //
   const academicYear = new URLSearchParams(url.search).get('academic_year');
   const periodId = new URLSearchParams(url.search).get('period_id');
   const schoolLocationId = new URLSearchParams(url.search).get('school_location_id');
+  const schoolLevelId = new URLSearchParams(url.search).get('school_level_id');
+  const yearLevelId = new URLSearchParams(url.search).get('year_level_id');
+  const pathwayId = new URLSearchParams(url.search).get('pathway_id');
+  const classId = new URLSearchParams(url.search).get('class_id');
+
+  if (!backUrl) {
+    errorHandlerHttp({
+      status: false,
+      message: 'tidak ada parameter back_url',
+    });
+    throw new Error('parameter salah');
+  }
 
   let params = null;
   if (
@@ -79,6 +93,19 @@ const getConfig = async () => {
       academic_year: academicYear,
       period_id: +periodId,
       school_location_id: +schoolLocationId,
+    }
+
+    if (schoolLevelId && !isNaN(+schoolLevelId)) {
+      params['school_level_id'] = +schoolLevelId;
+    }
+    if (yearLevelId && !isNaN(+yearLevelId)) {
+      params['year_level_id'] = +yearLevelId;
+    }
+    if (pathwayId && !isNaN(+pathwayId)) {
+      params['pathway_id'] = +pathwayId;
+    }
+    if (classId && !isNaN(+classId)) {
+      params['class_id'] = +classId;
     }
   }
 
@@ -103,6 +130,7 @@ const getConfig = async () => {
       {
         token,
         username: user.name,
+        backUrl,
       },
       params
     );
