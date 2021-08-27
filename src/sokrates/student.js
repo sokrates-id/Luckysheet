@@ -262,7 +262,7 @@ $(async function () {
 
   luckysheet.create({
     ...options,
-    ...sokratesOptions
+    ...sokratesOptions(config.auth),
   });
 
   $('#excel-save').click(() => {

@@ -7,6 +7,7 @@ const getStudents = async (config) => {
     const res = await $.ajax({
       url: config.sheet.student.url.get_students,
       type: 'GET',
+      data: config.params,
       dataType: 'json',
       headers: {"Authorization": `Bearer ${config.auth.token}`}
     });
@@ -32,6 +33,7 @@ const getParents = async (config) => {
     const res = await $.ajax({
       url: config.sheet.student.url.get_parents,
       type: 'GET',
+      data: config.params,
       dataType: 'json',
       headers: {"Authorization": `Bearer ${config.auth.token}`}
     });

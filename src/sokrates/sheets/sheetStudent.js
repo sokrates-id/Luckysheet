@@ -170,12 +170,12 @@ const sokratesSheetStudent = async (config, master, students) => {
       //   "conditionValue": [],
       // }
     ],
-    // "filter_select": {
-    //   "row": [0, totalRows - 1],
-    //   "column": [0, totalColumns - 2],
-    // },
+    "filter_select": {
+      "row": [0, totalRows - 1],
+      "column": [0, totalColumns - 2],
+    },
     luckysheet_select_save: [],
-    // dataVerification: studentValidations,
+    dataVerification: studentValidations,
   }
 }
 
