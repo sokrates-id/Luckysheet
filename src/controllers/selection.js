@@ -16,6 +16,7 @@ import { replaceHtml, getObjType, luckysheetfontformat } from '../utils/util';
 import Store from '../store';
 import locale from '../locale/locale';
 import imageCtrl from './imageCtrl';
+import method from "../global/method";
 
 const selection = {
     clearcopy: function (e) {
@@ -661,6 +662,8 @@ const selection = {
             let minc = Store.luckysheet_select_save[0].column[0], //应用范围首尾列
                 maxc = minc + copyc - 1;
 
+            console.debug(data);
+
             //应用范围包含部分合并单元格，则return提示
             let has_PartMC = false;
             if(cfg["merge"] != null){
@@ -866,6 +869,13 @@ const selection = {
 
             last["row"] = [curR, curR + rlen - 1];
             last["column"] = [curC, curC + clen - 1];
+
+            // ini tambahan sokrates, hook rangePasteAfter
+            console.log(last);
+            method.createHookFunction('rangePasteAfter',[{
+                row: last["row"],
+                column: last["column"],
+            }], dataChe);
 
             if (addr > 0 || addc > 0) {
                 let allParam = {
@@ -1605,6 +1615,13 @@ const selection = {
 
         last["row"] = [minh, maxh];
         last["column"] = [minc, maxc];
+
+        // ini tambahan sokrates, hook rangePasteAfter
+        method.createHookFunction('rangePasteAfter',[{
+            row: [minh, maxh],
+            column: [minc, maxc],
+        }], copyData);
+
 
         if(copyRowlChange || addr > 0 || addc > 0){
             cfg = rowlenByRange(d, minh, maxh, cfg);

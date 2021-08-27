@@ -29,6 +29,8 @@ $(async function () {
     provinces,
   }
 
+  const parentTypes = ['Father', 'Mother', 'Guardian'];
+
   const students = await serviceStudent.getStudents(config);
 
   const sheetStudent = await sokratesSheetStudent(config, master, students);
@@ -85,7 +87,7 @@ $(async function () {
         // console.info('cellUpdateBefore',r,c,value,isRefresh)
       },
       cellUpdated: function (r, c, oldValue, newValue, isRefresh, hookStop) {
-        console.info('cellUpdated', r, c, oldValue, newValue, isRefresh, hookStop);
+        // console.info('cellUpdated', r, c, oldValue, newValue, isRefresh, hookStop);
 
         if (hookStop) {
           return;
@@ -114,6 +116,12 @@ $(async function () {
           for (let rParent = rParentStart; rParent < rParentEnd; rParent++) {
 
             luckysheet.setCellValue(rParent, cParent, newValue, {
+              order: 1,
+              hookStop: true,
+            });
+
+            // set parent type
+            luckysheet.setCellValue(rParent, 2, parentTypes[Math.floor((rParent - 1) % 3)], {
               order: 1,
               hookStop: true,
             });
@@ -154,12 +162,77 @@ $(async function () {
         // console.info(json)
       },
       rangePasteBefore: function (range, data) {
-        console.info('rangePasteBefore',range,data)
+        // console.info('rangePasteBefore',range,data, range[0])
         // return false; //Can intercept paste
       },
       rangePasteAfter: function (range, data) {
-        console.info('rangePasteAfter', range, data)
-        // return false; //Can intercept paste
+        // console.info('rangePasteAfter', range, data);
+
+        const curSheet = luckysheet.sheetmanage.getCurSheet();
+        if (curSheet === 0) {
+          // handler student data update (student name, student nis), ganti ke sheet parent juga
+
+
+          if (range.length === 0) {
+            return;
+          }
+
+          const i = range[0]; // selalu index 0, karena multiple copy paste di disable
+          let rStart = i.row[0];
+          let rEnd = i.row[1];
+          let cStart = i.column[0];
+          let cEnd = i.column[1];
+
+          let dataCIdx = -1;
+          for (let c = cStart; c <= cEnd; c++) {
+            dataCIdx++;
+            let dataRIdx = -1;
+
+            let cParent = -1;
+            if (c === 0) { // column student name
+              cParent = 0;
+            } else if (c === 2) { // column nis
+              cParent = 1;
+            }
+
+            if (cParent < 0) {
+              continue;
+            }
+
+            for (let r = rStart; r <= rEnd; r++) {
+              dataRIdx++;
+
+              let value = null;
+
+              if (typeof data[dataRIdx][dataCIdx] === 'object') {
+                value = data[dataRIdx][dataCIdx] && data[dataRIdx][dataCIdx].v ? data[dataRIdx][dataCIdx].v : null
+              } else {
+                value = data[dataRIdx][dataCIdx];
+              }
+
+              // 3 karena ada 3 parent_type (father, mother, guardian)
+              const rParentStart = ((r - 1) * 3) + 1;
+              const rParentEnd = rParentStart + 3;
+
+              for (let rParent = rParentStart; rParent < rParentEnd; rParent++) {
+                luckysheet.setCellValue(rParent, cParent, value, {
+                  order: 1,
+                  hookStop: true,
+                });
+
+                // set parent type
+                luckysheet.setCellValue(rParent, 2, parentTypes[Math.floor((rParent - 1) % 3)], {
+                  order: 1,
+                  hookStop: true,
+                });
+
+              }
+            }
+          }
+        } else if (curSheet === 1) {
+          // handler parent data
+        }
+
       },
     },
     loading: {
@@ -177,7 +250,8 @@ $(async function () {
           console.log('function test click', clickEvent, event, params)
         }
       }]
-    },
+    }
+    ,
     data: [
       sheetStudent,
       sheetParent,
